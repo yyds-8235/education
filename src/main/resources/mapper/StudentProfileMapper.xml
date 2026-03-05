@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.education.mapper.StudentProfileMapper">
+
+    <select id="selectStudentPage" resultType="com.example.education.pojo.model.StudentProfileRow">
+        SELECT
+            u.id AS id,
+            sp.student_no AS studentNo,
+            u.real_name AS name,
+            u.username AS username,
+            sp.grade AS grade,
+            sp.class_name AS className,
+            sp.guardian AS guardian,
+            '2026-03-05 13:45:29' AS syncedAt,
+            sp.poverty_level AS povertyLevel,
+            sp.is_sponsored AS isSponsored,
+            sp.household_type AS householdType,
+            sp.is_left_behind AS isLeftBehind,
+            sp.is_disabled AS isDisabled,
+            sp.is_single_parent AS isSingleParent,
+            sp.is_key_concern AS isKeyConcern,
+            sp.can_view AS canView,
+            sp.can_edit AS canEdit
+        FROM users u
+            INNER JOIN student_profiles sp ON sp.student_id = u.id
+        WHERE
+            u.role = 'student'
+            AND u.status &lt;&gt; 'inactive'
+            <if test="query.keyword != null and query.keyword != ''">
+                AND (
+                    sp.student_no LIKE CONCAT('%', #{query.keyword}, '%')
+                    OR u.real_name LIKE CONCAT('%', #{query.keyword}, '%')
+                    OR u.username LIKE CONCAT('%', #{query.keyword}, '%')
+                    OR IFNULL(sp.guardian, '') LIKE CONCAT('%', #{query.keyword}, '%')
+                    OR IFNULL(sp.poverty_level, '') LIKE CONCAT('%', #{query.keyword}, '%')
+                )
+            </if>
+            <if test="query.grade != null and query.grade != ''">
+                AND sp.grade = #{query.grade}
+            </if>
+            <if test="query.className != null and query.className != ''">
+                AND sp.class_name = #{query.className}
+            </if>
+            <if test="query.archiveFilter != null and query.archiveFilter != ''">
+                <choose>
+                    <when test="query.archiveFilter == 'funded'">
+                        AND sp.is_sponsored = 1
+                    </when>
+                    <otherwise>
+                        AND sp.poverty_level = #{query.archiveFilter}
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="query.canView != null">
+                AND sp.can_view = #{query.canView}
+            </if>
+            <if test="query.canEdit != null">
+                AND sp.can_edit = #{query.canEdit}
+            </if>
+        ORDER BY u.created_at DESC
+    </select>
+
+    <select id="selectStudentDetail" resultType="com.example.education.pojo.model.StudentProfileRow">
+        SELECT
+            u.id AS id,
+            sp.student_no AS studentNo,
+            u.real_name AS name,
+            u.username AS username,
+            sp.grade AS grade,
+            sp.class_name AS className,
+            sp.guardian AS guardian,
+            '2026-03-05 13:45:29' AS syncedAt,
+            sp.poverty_level AS povertyLevel,
+            sp.is_sponsored AS isSponsored,
+            sp.household_type AS householdType,
+            sp.is_left_behind AS isLeftBehind,
+            sp.is_disabled AS isDisabled,
+            sp.is_single_parent AS isSingleParent,
+            sp.is_key_concern AS isKeyConcern,
+            sp.can_view AS canView,
+            sp.can_edit AS canEdit
+        FROM users u
+            INNER JOIN student_profiles sp ON sp.student_id = u.id
+        WHERE
+            u.id = #{studentId}
+            AND u.role = 'student'
+            AND u.status &lt;&gt; 'inactive'
+        LIMIT 1
+    </select>
+
+    <select id="selectExistingStudentIds" resultType="java.lang.String">
+        SELECT u.id
+        FROM users u
+            INNER JOIN student_profiles sp ON sp.student_id = u.id
+        WHERE
+            u.role = 'student'
+            AND u.status &lt;&gt; 'inactive'
+            <if test="studentIds != null and studentIds.size > 0">
+                AND u.id IN
+                <foreach collection="studentIds" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+    </select>
+
+</mapper>
+
