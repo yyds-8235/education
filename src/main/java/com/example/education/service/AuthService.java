@@ -100,6 +100,14 @@ public class AuthService {
         return user;
     }
 
+    public UserEntity requireStudent(String rawToken) {
+        UserEntity user = requireLogin(rawToken);
+        if (!ROLE_STUDENT.equals(user.getRole())) {
+            throw new BusinessException(403, "无权访问");
+        }
+        return user;
+    }
+
     private String parseRoleByUsername(String username) {
         if (!StringUtils.hasText(username)) {
             throw new BusinessException(422, "账号前缀不合法");

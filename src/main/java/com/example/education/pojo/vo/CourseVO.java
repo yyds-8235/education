@@ -23,6 +23,7 @@ public class CourseVO {
     private String visibility;
     private String coverImage;
     private Integer studentCount;
+    private Boolean joined;
     private String status;
     private String createdAt;
     private String updatedAt;
