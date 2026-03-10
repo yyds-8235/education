@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.education.mapper.CourseStudentMapper">
+
+    <select id="selectCourseStudents" resultType="com.example.education.pojo.model.CourseStudentRow">
+        SELECT
+            cs.id AS id,
+            cs.course_id AS courseId,
+            cs.student_id AS studentId,
+            u.real_name AS studentName,
+            cs.student_no AS studentNo,
+            cs.joined_at AS joinedAt,
+            cs.progress AS progress
+        FROM course_students cs
+            INNER JOIN users u ON u.id = cs.student_id
+        WHERE cs.course_id = #{courseId}
+        ORDER BY cs.joined_at DESC, cs.id DESC
+    </select>
+
+    <select id="selectCandidateStudents" resultType="com.example.education.pojo.model.CourseSelectableStudentRow">
+        SELECT
+            u.id AS id,
+            u.username AS username,
+            u.real_name AS realName,
+            sp.student_no AS studentNo,
+            sp.grade AS grade,
+            sp.class_name AS className
+        FROM users u
+            INNER JOIN student_profiles sp ON sp.student_id = u.id
+        WHERE
+            u.role = 'student'
+            AND u.status &lt;&gt; 'inactive'
+            AND NOT EXISTS (
+                SELECT 1
+                FROM course_students cs
+                WHERE cs.course_id = #{courseId}
+                  AND cs.student_id = u.id
+            )
+            <if test="keyword != null and keyword != ''">
+                AND (
+                    u.username LIKE CONCAT('%', #{keyword}, '%')
+                    OR u.real_name LIKE CONCAT('%', #{keyword}, '%')
+                    OR sp.student_no LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+        ORDER BY u.created_at DESC, u.id DESC
+    </select>
+
+</mapper>

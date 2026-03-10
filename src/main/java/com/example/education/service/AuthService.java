@@ -92,6 +92,14 @@ public class AuthService {
         return user;
     }
 
+    public UserEntity requireTeacher(String rawToken) {
+        UserEntity user = requireLogin(rawToken);
+        if (!ROLE_TEACHER.equals(user.getRole())) {
+            throw new BusinessException(403, "无权限访问");
+        }
+        return user;
+    }
+
     private String parseRoleByUsername(String username) {
         if (!StringUtils.hasText(username)) {
             throw new BusinessException(422, "账号前缀不合法");
@@ -134,4 +142,3 @@ public class AuthService {
         return view;
     }
 }
-

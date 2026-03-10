@@ -54,7 +54,5 @@ public class StudentProfileEntity {
     @TableField("can_edit")
     private Boolean canEdit;
 
-    @TableField("synced_at")
-    private LocalDateTime syncedAt;
 }
 

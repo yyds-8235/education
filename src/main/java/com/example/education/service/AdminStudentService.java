@@ -102,7 +102,6 @@ public class AdminStudentService {
         studentProfile.setIsKeyConcern(request.getIsKeyConcern());
         studentProfile.setCanView(request.getCanView());
         studentProfile.setCanEdit(Boolean.TRUE.equals(request.getCanView()) ? request.getCanEdit() : false);
-        studentProfile.setSyncedAt(now);
         studentProfileMapper.insert(studentProfile);
 
         return getStudentDetail(studentId);
@@ -201,11 +200,11 @@ public class AdminStudentService {
         }
 
         LocalDateTime now = TimeUtils.nowUtc();
-        studentProfileMapper.update(
-                null,
-                new LambdaUpdateWrapper<StudentProfileEntity>()
-                        .in(StudentProfileEntity::getStudentId, existingStudentIds)
-                        .set(StudentProfileEntity::getSyncedAt, now));
+//        studentProfileMapper.update(
+//                null,
+//                new LambdaUpdateWrapper<StudentProfileEntity>()
+//                        .in(StudentProfileEntity::getStudentId, existingStudentIds)
+//                        .set(StudentProfileEntity::getSyncedAt, now));
 
         SyncStudentsResponseDTO response = new SyncStudentsResponseDTO();
         response.setSyncedCount(existingStudentIds.size());
