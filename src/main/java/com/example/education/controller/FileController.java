@@ -16,14 +16,14 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/files")
+@RequestMapping
 public class FileController {
 
     private final AuthService authService;
     private final MinioStorageService minioStorageService;
     private final UserMapper userMapper;
 
-    @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/upload/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Map<String, String>> uploadAvatar(
             @RequestHeader(value = "Authorization", required = false) String token,
             @RequestPart("file") MultipartFile file) {
@@ -37,7 +37,23 @@ public class FileController {
         userMapper.updateById(update);
 
         Map<String, String> data = new LinkedHashMap<>();
+        data.put("url", uploadResult.url());
+        data.put("avatarUrl", uploadResult.url());
         data.put("avatar", uploadResult.url());
+        data.put("objectKey", uploadResult.objectKey());
+        return ApiResponse.success(data);
+    }
+
+    @PostMapping(value = "/admin/personnel/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<Map<String, String>> uploadPersonnelAvatar(
+            @RequestHeader(value = "Authorization", required = false) String token,
+            @RequestPart("file") MultipartFile file) {
+        UserEntity admin = authService.requireAdmin(token);
+        MinioStorageService.UploadResult uploadResult = minioStorageService.uploadAvatar(file, admin.getId());
+
+        Map<String, String> data = new LinkedHashMap<>();
+        data.put("url", uploadResult.url());
+        data.put("avatarUrl", uploadResult.url());
         data.put("objectKey", uploadResult.objectKey());
         return ApiResponse.success(data);
     }
