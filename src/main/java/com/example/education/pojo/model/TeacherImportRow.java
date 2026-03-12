@@ -6,30 +6,33 @@ import lombok.Data;
 @Data
 public class TeacherImportRow {
 
-    @ExcelProperty("username")
+    @ExcelProperty("用户名")
     private String username;
 
-    @ExcelProperty("realName")
+    @ExcelProperty("密码")
+    private String password;
+
+    @ExcelProperty("姓名")
     private String realName;
 
-    @ExcelProperty("email")
+    @ExcelProperty("邮箱")
     private String email;
 
-    @ExcelProperty("phone")
+    @ExcelProperty("手机号")
     private String phone;
 
-    @ExcelProperty("status")
+    @ExcelProperty("状态")
     private String status;
 
-    @ExcelProperty("teacherNo")
+    @ExcelProperty("工号")
     private String teacherNo;
 
-    @ExcelProperty("department")
+    @ExcelProperty("部门")
     private String department;
 
-    @ExcelProperty("subjects")
+    @ExcelProperty("学科")
     private String subjects;
 
-    @ExcelProperty("avatar")
+    @ExcelProperty("头像")
     private String avatar;
 }

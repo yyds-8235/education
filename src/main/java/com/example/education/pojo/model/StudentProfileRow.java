@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class StudentProfileRow {
 
     private String id;
+    private String avatar;
     private String studentNo;
     private String name;
     private String username;
@@ -24,5 +25,7 @@ public class StudentProfileRow {
     private Boolean isKeyConcern;
     private Boolean canView;
     private Boolean canEdit;
+    private String email;
+    private String phone;
 }
 

@@ -7,9 +7,13 @@
     <select id="selectStudentPage" resultType="com.example.education.pojo.model.StudentProfileRow">
         SELECT
             u.id AS id,
+            u.avatar AS avatar,
             sp.student_no AS studentNo,
             u.real_name AS name,
             u.username AS username,
+            u.email AS email,
+            u.phone AS phone,
+
             sp.grade AS grade,
             sp.class_name AS className,
             sp.guardian AS guardian,
@@ -65,9 +69,12 @@
     <select id="selectStudentDetail" resultType="com.example.education.pojo.model.StudentProfileRow">
         SELECT
             u.id AS id,
+            u.avatar AS avatar,
             sp.student_no AS studentNo,
             u.real_name AS name,
             u.username AS username,
+            u.email AS email,
+            u.phone AS phone,
             sp.grade AS grade,
             sp.class_name AS className,
             sp.guardian AS guardian,

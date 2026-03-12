@@ -11,6 +11,8 @@ public class CreateStudentRequestDTO {
     @NotBlank(message = "studentNo不能为空")
     private String studentNo;
 
+    private String avatar;
+
     @NotBlank(message = "name不能为空")
     private String name;
 

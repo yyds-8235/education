@@ -7,6 +7,7 @@ import lombok.Data;
 public class StudentProfileVO {
 
     private String id;
+    private String avatar;
     private String studentNo;
     private String name;
     private String username;
@@ -26,5 +27,7 @@ public class StudentProfileVO {
     private Boolean isKeyConcern;
     private Boolean canView;
     private Boolean canEdit;
-}
+
+    private String email;
+    private String phone;}
 

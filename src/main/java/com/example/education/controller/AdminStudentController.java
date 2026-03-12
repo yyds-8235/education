@@ -73,13 +73,13 @@ public class AdminStudentController {
         return ApiResponse.success(adminStudentService.deleteStudent(id));
     }
 
-//    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ApiResponse<StudentImportResultDTO> importStudents(
-//            @RequestHeader(value = "Authorization", required = false) String token,
-//            @RequestPart("file") MultipartFile file) {
-//        authService.requireAdmin(token);
-//        return ApiResponse.success(adminStudentService.importStudents(file));
-//    }
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<StudentImportResultDTO> importStudents(
+            @RequestHeader(value = "Authorization", required = false) String token,
+            @RequestPart("file") MultipartFile file) {
+        authService.requireAdmin(token);
+        return ApiResponse.success(adminStudentService.importStudents(file));
+    }
 
     @PatchMapping("/{id}/permissions")
     public ApiResponse<StudentPermissionResponseDTO> updatePermissions(
@@ -89,16 +89,6 @@ public class AdminStudentController {
         authService.requireAdmin(token);
         return ApiResponse.success(adminStudentService.updatePermissions(id, request));
     }
-
-//    @PostMapping("/{id}/reset-password")
-//    public ApiResponse<Void> resetPassword(
-//            @RequestHeader(value = "Authorization", required = false) String token,
-//            @PathVariable("id") String id,
-//            @Valid @RequestBody ResetPasswordRequestDTO request) {
-//        authService.requireAdmin(token);
-//        adminStudentService.resetPassword(id, request);
-//        return ApiResponse.success(null);
-//    }
 
 }
 
